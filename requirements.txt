@@ -1,0 +1,7 @@
+requests
+playwright
+playwright-stealth
+torch
+torchvision
+Pillow
+tqdm
