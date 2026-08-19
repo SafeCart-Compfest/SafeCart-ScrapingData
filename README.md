@@ -13,16 +13,17 @@ playwright install
 
 ```
 SafeCart-ScrapingData/
-├── scrape_tokopedia.py      # Tahap 1: Scraping produk dari Tokopedia
-├── merge_tokopedia.py         # Tahap 2: Gabungkan hasil scraping paralel
-├── requirements.txt         # Daftar library Python
-├── Clean Dataset Tokopedia/   # Tahap 3-5: Training model & cleaning
-│   ├── sample_tokopedia.py  # Tahap 3: Ambil sampel untuk labeling
-│   ├── train_tokopedia.py   # Tahap 4: Training model AI
-│   ├── clean_tokopedia.py   # Tahap 5: Bersihkan dataset pakai model
-│   ├── model/               # Folder berisi file model (.pth)
-│   └── samples/             # Folder sampel (keep/discard)
-└── README.md                # File ini
+├── Scraping Data Tokopedia/   # Pipeline Tokopedia lengkap (Scraping & Cleaning)
+│   ├── scrape_tokopedia.py    # Tahap 1: Scraping produk dari Tokopedia
+│   ├── merge_tokopedia.py     # Tahap 2: Gabungkan hasil scraping paralel
+│   └── Clean Dataset Tokopedia/ # Tahap 3-5: Training model & cleaning
+│       ├── sample_tokopedia.py  # Tahap 3: Ambil sampel untuk labeling
+│       ├── train_tokopedia.py   # Tahap 4: Training model AI
+│       ├── clean_tokopedia.py   # Tahap 5: Bersihkan dataset pakai model
+│       ├── model/               # Folder berisi file model (.pth)
+│       └── samples/             # Folder sampel (keep/discard)
+├── requirements.txt           # Daftar library Python
+└── README.md                  # File ini
 ```
 
 ## Pipeline Lengkap
@@ -33,6 +34,7 @@ Script ini membuka browser Chromium, mencari produk di Tokopedia, lalu mengunduh
 
 **Cara menjalankan:**
 ```bash
+cd "Scraping Data Tokopedia"
 python scrape_tokopedia.py
 ```
 
@@ -89,6 +91,7 @@ Script ini menggabungkan hasil scraping yang dijalankan secara paralel di folder
 
 **Cara menjalankan:**
 ```bash
+cd "Scraping Data Tokopedia"
 python merge_tokopedia.py
 ```
 
@@ -111,13 +114,13 @@ FOLDERS_RANGE = range(1, 7)
 
 ---
 
-### Tahap 3: Sampling (`Clean Dataset Tokopedia/sample_tokopedia.py`)
+### Tahap 3: Sampling (`Scraping Data Tokopedia/Clean Dataset Tokopedia/sample_tokopedia.py`)
 
 Mengambil sampel acak dari dataset raw untuk dilabeli secara manual. Sampel ini akan menjadi data training untuk model AI di tahap selanjutnya.
 
 **Cara menjalankan:**
 ```bash
-cd "Clean Dataset Tokopedia"
+cd "Scraping Data Tokopedia/Clean Dataset Tokopedia"
 python sample_tokopedia.py
 ```
 
@@ -135,7 +138,7 @@ Script akan membuat folder `samples/unlabeled/` berisi gambar acak. Tugas Anda:
 
 ---
 
-### Tahap 4: Training Model (`Clean Dataset Tokopedia/train_tokopedia.py`)
+### Tahap 4: Training Model (`Scraping Data Tokopedia/Clean Dataset Tokopedia/train_tokopedia.py`)
 
 Melatih model MobileNetV2 menggunakan data yang sudah dilabeli di tahap 3. Output berupa file `.pth` di folder `model/`.
 
@@ -143,7 +146,7 @@ Melatih model MobileNetV2 menggunakan data yang sudah dilabeli di tahap 3. Outpu
 
 **Cara menjalankan:**
 ```bash
-cd "Clean Dataset Tokopedia"
+cd "Scraping Data Tokopedia/Clean Dataset Tokopedia"
 python train_tokopedia.py
 ```
 
@@ -158,13 +161,13 @@ LEARNING_RATE = 0.001 # Learning rate optimizer
 
 ---
 
-### Tahap 5: Cleaning Dataset (`Clean Dataset Tokopedia/clean_tokopedia.py`)
+### Tahap 5: Cleaning Dataset (`Scraping Data Tokopedia/Clean Dataset Tokopedia/clean_tokopedia.py`)
 
 Mesin utama. Script ini menggunakan model dari tahap 4 untuk memindai seluruh gambar dan memisahkan gambar produk bersih dari gambar marketing/infografis.
 
 **Cara menjalankan:**
 ```bash
-cd "Clean Dataset Tokopedia"
+cd "Scraping Data Tokopedia/Clean Dataset Tokopedia"
 python clean_tokopedia.py
 ```
 
@@ -182,8 +185,16 @@ CONFIDENCE_THRESHOLD = 0.6  # Minimum probability untuk "keep" (0.0 - 1.0)
 
 ---
 
-## Catatan Penting
+## 📌 Dokumentasi Scraping Lainnya
 
+- **BPOM (Badan Pengawas Obat dan Makanan):** [Dokumentasi Scraping BPOM](Scraping%20Data%20BPOM/README.md)
+- **Sociolla:** [TBA]
+
+---
+
+## 🤝 Berkontribusi
+
+### Catatan Penting
 - **Resume otomatis:** Semua script mendukung resume. Jika scraping/cleaning terhenti (crash, captcha, dll.), cukup jalankan ulang dan akan melanjutkan dari posisi terakhir.
 - **Anti-deteksi:** Script scraping menggunakan `playwright-stealth` dan persistent browser profile untuk menghindari deteksi bot.
 - **GPU opsional:** Training dan cleaning bisa jalan di CPU, tapi akan lebih cepat jika ada GPU (CUDA).
